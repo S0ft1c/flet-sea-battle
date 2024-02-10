@@ -47,7 +47,8 @@ def add_prize(page: ft.Page):
             # return to the prev
             ft.Row(controls=[
                 ft.Column(controls=[
-                    ft.IconButton(icon=ft.icons.EXIT_TO_APP_ROUNDED, icon_color='red200')
+                    ft.IconButton(icon=ft.icons.EXIT_TO_APP_ROUNDED, icon_color='red200',
+                                  on_click=lambda _: page.go('/admin_panel'))
                 ]),
             ], alignment=ft.MainAxisAlignment.START),
 

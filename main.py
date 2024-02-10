@@ -19,6 +19,8 @@ def main(page: ft.Page):
             user.dashboard(page)
         if page.route == '/add_prize':
             admin.add_prize(page)
+        if '/add_ship' in page.route:
+            admin.add_ship(page)
 
     page.bgcolor = BG
     page.on_route_change = route_changed

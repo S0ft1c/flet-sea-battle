@@ -2,12 +2,16 @@ import flet as ft
 from colors import *
 from db import db
 
+cur_field_selected = -1
+
 
 def admin_panel(page: ft.Page):
-    cur_field_selected = -1
+    global cur_field_selected
 
-    def create_prize(event):
+    def add_ship(event):
+        global cur_field_selected
         i = -1
+        j = -1
         for ii in range(len(page.views[-1].controls[2].controls[0].controls)):
             try:
                 j = (page.views[-1].controls[2].controls[0].controls[ii].controls.index(event.control))
@@ -15,7 +19,8 @@ def admin_panel(page: ft.Page):
                 break
             except:
                 pass
-        # TODO: доделать прикол с добавлением приза
+        page.go(f'/add_ship/{i}|{j}|{cur_field_selected}')
+        return
 
     def draw_table(cur_field_selected):
         if cur_field_selected != -1:
@@ -30,10 +35,18 @@ def admin_panel(page: ft.Page):
             for i in range(n):
                 page.views[-1].controls[2].controls[0].controls.append(ft.Row())
                 for j in range(n):
-                    page.views[-1].controls[2].controls[0].controls[i].controls.append(
-                        ft.IconButton(icon=ft.icons.HOURGLASS_EMPTY, icon_color='blue200',
-                                      on_click=create_prize)
-                    )
+                    for ship in ships_data:
+                        if i == ship[1] and j == ship[2]:
+                            page.views[-1].controls[2].controls[0].controls[i].controls.append(
+                                ft.IconButton(icon=ft.icons.LOCAL_SHIPPING, icon_color='blue200',
+                                              on_click=add_ship)
+                            )
+                            break
+                    else:
+                        page.views[-1].controls[2].controls[0].controls[i].controls.append(
+                            ft.IconButton(icon=ft.icons.HOURGLASS_EMPTY, icon_color='blue200',
+                                          on_click=add_ship)
+                        )
             page.update()
 
     def add_board(event):
@@ -66,6 +79,8 @@ def admin_panel(page: ft.Page):
         return
 
     def field_selected(event):
+        global cur_field_selected
+
         text = event.control.text
         cur_field_selected = int(text.split()[-1])
         print(cur_field_selected)
@@ -88,10 +103,13 @@ def admin_panel(page: ft.Page):
                     ft.Container(
                         content=ft.Column(controls=[
                             ft.Row(controls=[
-                                ft.Text(value=prize[1], bgcolor=FWG, color='white', size=24)
+                                ft.Text(value=prize[0], color='black', size=12)
                             ]),
                             ft.Row(controls=[
-                                ft.Text(value=prize[2], bgcolor=FWG, color='white', size=16),
+                                ft.Text(value=prize[1], color='black', size=24)
+                            ]),
+                            ft.Row(controls=[
+                                ft.Text(value=prize[2], color='black', size=16),
                             ]),
                             ft.Row(controls=[
                                 ft.Image(src=prize[3], width=300, height=400)
@@ -140,7 +158,7 @@ def admin_panel(page: ft.Page):
                     ft.Column(controls=[]),  # here will be all the table
 
                     # all the prizes
-                    ft.Column(controls=get_all_prizes(), scroll=ft.ScrollMode.ALWAYS, width=300, height=700,
+                    ft.Column(controls=get_all_prizes(), scroll=ft.ScrollMode.ALWAYS, width=500, height=700,
                               spacing=10)
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             ], bgcolor=BG),

@@ -12,6 +12,17 @@ class SQLiteManager:
         self.connection = sqlite3.connect(self.db_name)
         self.cursor = self.connection.cursor()
 
+    def delete_data(self, table_name, condition=None):
+        try:
+            select_query = f"DELETE FROM {table_name}"
+            if condition:
+                select_query += f" WHERE {condition}"
+            self.cursor.execute(select_query)
+            self.connection.commit()
+        except Exception as e:
+            print(f"Error selecting data: {e}")
+            return None
+
     def create_table(self, table_name, columns):
         try:
             create_table_query = f"CREATE TABLE IF NOT EXISTS {table_name} ({columns})"
