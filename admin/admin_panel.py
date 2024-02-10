@@ -71,12 +71,25 @@ def admin_panel(page: ft.Page):
         print(cur_field_selected)
         draw_table(cur_field_selected)
 
+    def logout_admin(event):
+        page.session.remove('login_admin')
+        page.go('/')
+        return
+
     page.views.clear()  # clear all
     if page.session.contains_key('login_admin'):
 
         page.views.append(  # create a new view
             ft.View(controls=[
                 ft.Row(controls=[
+                    ft.Column(controls=[
+                        ft.ElevatedButton(
+                            text='Выйти из аккаунта',
+                            icon=ft.icons.EXIT_TO_APP,
+                            icon_color='red200',
+                            on_click=logout_admin
+                        )
+                    ]),
                     ft.Column(controls=[
                         ft.ElevatedButton(
                             text='Создать новую доску',
@@ -119,8 +132,4 @@ def admin_panel(page: ft.Page):
                 ])
             )
     else:
-        page.views.append(
-            ft.View(controls=[
-                ft.Text(value='ОЙ! Извините, но вы не должны тут быть...', color='red')
-            ])
-        )
+        page.go('/')

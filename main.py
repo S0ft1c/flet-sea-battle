@@ -16,11 +16,11 @@ def main(page: ft.Page):
         if page.route == '/register':
             user.register(page)
         if page.route == '/dashboard':
-            pass  # TODO сделать дэшбоард
+            user.dashboard(page)
 
     page.bgcolor = BG
     page.on_route_change = route_changed
     page.go(page.route)
 
 
-ft.app(target=main, view=ft.AppView.WEB_BROWSER)
+ft.app(target=main, view=ft.AppView.WEB_BROWSER, port=5000)

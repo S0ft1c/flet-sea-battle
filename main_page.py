@@ -1,9 +1,6 @@
 import flet as ft
-
-BG = '#041955'
-FWG = '#97b4ff'
-FG = '#3450a1'
-PINK = '#eb06ff'
+from db import db
+from colors import *
 
 
 def main_page(page: ft.Page):
@@ -12,6 +9,26 @@ def main_page(page: ft.Page):
 
     def go_to_register(event):
         page.go('/register')
+
+    def login(event):
+        username = page.views[-1].controls[3].controls[0].content.value
+        passwd = page.views[-1].controls[4].controls[0].content.value
+
+        db.connect()
+        data = db.select_data('users', f'username="{username}" and passwd="{passwd}"')
+        db.close_connection()
+
+        if data:
+            page.session.set('login', username)
+            page.go('/dashboard')
+
+    # check for the tokens
+    if page.session.contains_key('login'):
+        page.go('dashboard')
+        return
+    elif page.session.contains_key('login_admin'):
+        page.go('/admin_panel')
+        return
 
     page.views.clear()
     page.views.append(ft.View(controls=[
@@ -68,7 +85,7 @@ def main_page(page: ft.Page):
                 content=ft.TextField(
                     label='Введите пароль от вашего аккаунта',
                     border_radius=15, border_width=2, border_color=PINK,
-                    text_size=24, color='white'
+                    text_size=24, color='white', password=True
                 ),
                 bgcolor=FWG, height=100, width=500, alignment=ft.alignment.center, padding=15,
                 border_radius=10,
@@ -88,7 +105,7 @@ def main_page(page: ft.Page):
                 ft.FilledButton(
                     text='Войти',
                     icon=ft.icons.STRAIGHT,
-                    on_click=lambda x: x,  # TODO заглушка тут
+                    on_click=login
                 )
             ]),
         ], alignment=ft.MainAxisAlignment.CENTER)
