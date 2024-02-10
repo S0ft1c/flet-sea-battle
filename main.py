@@ -17,10 +17,12 @@ def main(page: ft.Page):
             user.register(page)
         if page.route == '/dashboard':
             user.dashboard(page)
+        if page.route == '/add_prize':
+            admin.add_prize(page)
 
     page.bgcolor = BG
     page.on_route_change = route_changed
     page.go(page.route)
 
 
-ft.app(target=main, view=ft.AppView.WEB_BROWSER, port=5000)
+ft.app(target=main, view=ft.AppView.WEB_BROWSER, port=5000, upload_dir='data/uploads', assets_dir='data')

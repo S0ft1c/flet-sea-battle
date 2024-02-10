@@ -4,7 +4,6 @@ from db import db
 
 
 def admin_panel(page: ft.Page):
-
     cur_field_selected = -1
 
     def create_prize(event):
@@ -63,7 +62,8 @@ def admin_panel(page: ft.Page):
         page.update()
 
     def add_prize(event):
-        pass
+        page.go('/add_prize')
+        return
 
     def field_selected(event):
         text = event.control.text
@@ -75,6 +75,32 @@ def admin_panel(page: ft.Page):
         page.session.remove('login_admin')
         page.go('/')
         return
+
+    def get_all_prizes():
+        db.connect()
+        prizes = db.select_data('prizes')
+        db.close_connection()
+
+        col = []
+        for prize in prizes:
+            col.append(
+                ft.Row(controls=[
+                    ft.Container(
+                        content=ft.Column(controls=[
+                            ft.Row(controls=[
+                                ft.Text(value=prize[1], bgcolor=FWG, color='white', size=24)
+                            ]),
+                            ft.Row(controls=[
+                                ft.Text(value=prize[2], bgcolor=FWG, color='white', size=16),
+                            ]),
+                            ft.Row(controls=[
+                                ft.Image(src=prize[3], width=300, height=400)
+                            ])
+                        ]), bgcolor='white', border_radius=10, border=ft.border.all(8, 'purple'),
+                    )
+                ])
+            )
+        return col
 
     page.views.clear()  # clear all
     if page.session.contains_key('login_admin'):
@@ -101,7 +127,7 @@ def admin_panel(page: ft.Page):
                         ft.ElevatedButton(
                             text='Создать новый приз',
                             color='white', icon=ft.icons.GRID_GOLDENRATIO, icon_color=PINK,
-                            on_click=add_board, bgcolor='blue200'
+                            on_click=add_prize, bgcolor='blue200'
                         )
                     ])
                 ], alignment=ft.MainAxisAlignment.SPACE_AROUND),
@@ -111,8 +137,12 @@ def admin_panel(page: ft.Page):
 
                 # for the while field
                 ft.Row(controls=[
-                    ft.Column(controls=[])  # here will be all the table
-                ]),
+                    ft.Column(controls=[]),  # here will be all the table
+
+                    # all the prizes
+                    ft.Column(controls=get_all_prizes(), scroll=ft.ScrollMode.ALWAYS, width=300, height=700,
+                              spacing=10)
+                ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             ], bgcolor=BG),
         )
 

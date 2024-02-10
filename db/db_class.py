@@ -66,6 +66,6 @@ db.create_table('users',
                 ' shoots integer, prizes string')
 db.create_table('ships', 'id INTEGER PRIMARY KEY AUTOINCREMENT, x integer, y integer, prize_id integer,'
                          'field_id integer')
-db.create_table('prizes', 'id INTEGER PRIMARY KEY AUTOINCREMENT, name')
+db.create_table('prizes', 'id INTEGER PRIMARY KEY AUTOINCREMENT, name string, desc string, src string')
 db.create_table('fields', 'id INTEGER PRIMARY KEY AUTOINCREMENT, n integer')
 db.close_connection()
