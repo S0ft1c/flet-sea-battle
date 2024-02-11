@@ -10,11 +10,11 @@ def register(page: ft.Page):
         if not username or not passwd:
             return
         db.connect()
-        ans = db.insert_data('users', ['user', username, passwd, 2, ""], ['status', 'username', 'passwd', 'shoots', 'prizes'])
+        ans = db.insert_data('users', ['user', username, passwd, '', ""], ['status', 'username', 'passwd', 'shoots', 'prizes'])
         db.close_connection()
         page.session.set('login', username)
         if ans:
-            page.go('dashboard')
+            page.go('/dashboard')
             return
 
     page.views.clear()

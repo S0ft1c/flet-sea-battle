@@ -21,6 +21,12 @@ def main(page: ft.Page):
             admin.add_prize(page)
         if '/add_ship' in page.route:
             admin.add_ship(page)
+        if page.route == '/shoots':
+            admin.shoots(page)
+        if 'add_shoots' in page.route:
+            admin.add_shoots_to_person(page)
+        if 'remove_shoots' in page.route:
+            admin.remove_shoots_from_person(page)
 
     page.bgcolor = BG
     page.on_route_change = route_changed

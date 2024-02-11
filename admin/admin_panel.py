@@ -8,6 +8,23 @@ cur_field_selected = -1
 def admin_panel(page: ft.Page):
     global cur_field_selected
 
+    def add_btns_fields():
+        # receive the data for all the boards
+        db.connect()
+        fields = db.select_data('fields')
+        db.close_connection()
+        page.views[-1].controls[1].controls.clear()
+        for idx, field in enumerate(fields):
+            page.views[-1].controls[1].controls.append(
+                ft.Column(controls=[
+                    ft.ElevatedButton(
+                        text=f'Открыть поле номер {field[0]}',
+                        color='black200',
+                        on_click=field_selected
+                    )
+                ])
+            )
+
     def add_ship(event):
         global cur_field_selected
         i = -1
@@ -56,6 +73,7 @@ def admin_panel(page: ft.Page):
                 db.connect()
                 db.insert_data('fields', [n], columns=['n'])
                 page.views.pop()
+                add_btns_fields()
                 page.update()
             except:
                 pass
@@ -89,6 +107,10 @@ def admin_panel(page: ft.Page):
     def logout_admin(event):
         page.session.remove('login_admin')
         page.go('/')
+        return
+
+    def go_to_shoots(event):
+        page.go('/shoots')
         return
 
     def get_all_prizes():
@@ -143,6 +165,13 @@ def admin_panel(page: ft.Page):
                     ]),
                     ft.Column(controls=[
                         ft.ElevatedButton(
+                            text='Распределить выстрелы',
+                            color='white', icon=ft.icons.TROUBLESHOOT, icon_color=PINK,
+                            on_click=go_to_shoots, bgcolor='blue200'
+                        )
+                    ]),
+                    ft.Column(controls=[
+                        ft.ElevatedButton(
                             text='Создать новый приз',
                             color='white', icon=ft.icons.GRID_GOLDENRATIO, icon_color=PINK,
                             on_click=add_prize, bgcolor='blue200'
@@ -163,21 +192,7 @@ def admin_panel(page: ft.Page):
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             ], bgcolor=BG),
         )
-
-        # receive the data for all the boards
-        db.connect()
-        fields = db.select_data('fields')
-        db.close_connection()
-
-        for idx, field in enumerate(fields):
-            page.views[-1].controls[1].controls.append(
-                ft.Column(controls=[
-                    ft.ElevatedButton(
-                        text=f'Открыть поле номер {field[0]}',
-                        color='black200',
-                        on_click=field_selected
-                    )
-                ])
-            )
+        add_btns_fields()
+        page.update()
     else:
         page.go('/')

@@ -65,6 +65,21 @@ class SQLiteManager:
             print(f"Error selecting data: {e}")
             return None
 
+    def update_data(self, table_name, column_to_update, new_value, condition=None):
+        try:
+            update_query = f"UPDATE {table_name} SET {column_to_update} = ?"
+            if condition:
+                update_query += f" WHERE {condition}"
+            self.cursor.execute(update_query, (new_value,))
+
+            # Commit the changes
+            self.connection.commit()
+
+            print("Data updated successfully.")
+
+        except sqlite3.Error as e:
+            print(f"Error updating data: {e}")
+
     def close_connection(self):
         if self.connection:
             self.connection.close()
@@ -74,7 +89,7 @@ class SQLiteManager:
 db = SQLiteManager('db.sqlite')
 db.create_table('users',
                 'id INTEGER PRIMARY KEY AUTOINCREMENT, status string, username string, passwd string,'
-                ' shoots integer, prizes string')
+                ' shoots string, prizes string')
 db.create_table('ships', 'id INTEGER PRIMARY KEY AUTOINCREMENT, x integer, y integer, prize_id integer,'
                          'field_id integer')
 db.create_table('prizes', 'id INTEGER PRIMARY KEY AUTOINCREMENT, name string, desc string, src string')
