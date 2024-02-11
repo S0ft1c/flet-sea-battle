@@ -15,10 +15,10 @@ def add_shoots_to_person(page: ft.Page):
         db.connect()
         f_info = db.select_data('users', f'id = {id}')[0][4]
         if not f_info:
-            f_info = {field_id: 1}
+            f_info = {str(field_id): 1}
         else:
             f_info: dict = json.loads(f_info)
-            f_info[str(field_id)] = 1 + f_info.get(field_id, 0)
+            f_info[str(field_id)] = 1 + f_info.get(str(field_id), 0)
         f_info = json.dumps(f_info)
         db.update_data('users', 'shoots', f_info, f'id={id}')
         db.close_connection()
