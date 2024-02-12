@@ -41,6 +41,11 @@ def dashboard(page: ft.Page):
             )
 
     def shoot_the_spot(event):
+
+        if all_shoots[str(cur_field_selected)] == 0:
+            db.close_connection()
+            return
+
         i, j = -1, -1
         for ii in range(len(page.views[-1].controls[2].controls[0].controls)):
             try:
@@ -57,6 +62,7 @@ def dashboard(page: ft.Page):
         if prize:
             prize = prize[0]
             prize_id = int(prize[3])
+
             db.connect()
             cur_prizes = str(db.select_data('users', f'id={user_id[0]}')[0][-1])
             if not cur_prizes:
