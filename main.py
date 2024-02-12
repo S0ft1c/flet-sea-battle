@@ -27,6 +27,14 @@ def main(page: ft.Page):
             admin.add_shoots_to_person(page)
         if 'remove_shoots' in page.route:
             admin.remove_shoots_from_person(page)
+        if page.route == '/was_prize':
+            user.was_prize(page)
+        if page.route == '/lost_shoot':
+            user.lost_shoot(page)
+        if page.route == '/prizes_page':
+            user.prizes_page(page)
+        if '/won_prize' in page.route:
+            user.won_prize(page)
 
     page.bgcolor = BG
     page.on_route_change = route_changed

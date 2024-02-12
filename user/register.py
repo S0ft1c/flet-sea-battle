@@ -12,7 +12,7 @@ def register(page: ft.Page):
         db.connect()
         ans = db.insert_data('users', ['user', username, passwd, '', ""], ['status', 'username', 'passwd', 'shoots', 'prizes'])
         db.close_connection()
-        page.session.set('login', username)
+        page.session.set('login', ans)
         if ans:
             page.go('/dashboard')
             return

@@ -32,7 +32,7 @@ class SQLiteManager:
         except Exception as e:
             print(f"Error creating table: {e}")
 
-    def insert_data(self, table_name, data, columns=None):
+    def insert_data(self, table_name, data, columns=None, user_id=False):
         if columns is None:
             columns = []
         try:
@@ -49,6 +49,9 @@ class SQLiteManager:
             self.cursor.execute(insert_query, data)
             self.connection.commit()
             print("Data inserted successfully.")
+            if user_id:
+                user_id = db.select_data('users')[0][0]
+                return user_id
             return True
         except Exception as e:
             print(f"Error inserting data: {e}")

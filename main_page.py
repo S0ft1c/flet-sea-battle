@@ -19,7 +19,7 @@ def main_page(page: ft.Page):
         db.close_connection()
 
         if data:
-            page.session.set('login', username)
+            page.session.set('login', data[0])
             page.go('/dashboard')
 
     # check for the tokens
