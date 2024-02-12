@@ -1,4 +1,4 @@
-BG = '#070F2B'
-FWG = '#97b4ff'
+BG = '#092635'
+FWG = '#9EC8B9'
 FG = '#3450a1'
-PINK = '#eb06ff'
+PINK = '#5C8374'
